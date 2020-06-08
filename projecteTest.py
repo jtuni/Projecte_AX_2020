@@ -37,7 +37,6 @@ def projecteTopo(cip):
     s1 = net.addSwitch( 's1' )
     info('      s1\n')
 
-
     info( '\n*** Adding hosts\n' )
     server1 = net.addHost( 'server1', ip='10.0.0.1' )
     server2 = net.addHost( 'server2', ip='10.0.10.2' )
@@ -51,13 +50,17 @@ def projecteTopo(cip):
     info('      h1<->server1\n')
     info('      h1<->s1\n')
     info('      s1<->server2\n')
-    h1.cmd('ifconfig h1-eth1 10.0.10.1 netmask 255.255.255.0')
-    h1.cmd('ifconfig h1-eth0 10.0.0.2 netmask 255.255.255.0')
+
     server1.cmd('ifconfig server1-eth0 10.0.0.1 netmask 255.255.255.0')
     server2.cmd('ifconfig server2-eth0 10.0.10.2 netmask 255.255.255.0')
+    h1.cmd('ifconfig h1-eth0 10.0.0.2 netmask 255.255.255.0')
+    h1.cmd('ifconfig h1-eth1 10.0.11.1 netmask 255.255.255.0')
 
-    s1.cmd('ifconfig s1-eth1 10.0.10.3 netmask 255.255.255.0')
-    s1.cmd('ifconfig s1-eth2 10.0.10.4 netmask 255.255.255.0')
+    s1.cmd('ifconfig s1-eth1 10.0.10.1 netmask 255.255.255.0')
+    s1.cmd('ifconfig s1-eth2 10.0.11.2 netmask 255.255.255.0')
+
+    server2.cmd('sudo ip route add 10.0.11.0/24 dev server2-eth0 via 10.0.10.1')
+    h1.cmd('sudo ip route add 10.0.10.0/24 dev h1-eth0 via 10.0.11.2')
 
     h1 = net.get('h1')
     server1 = net.get('server1')
@@ -66,13 +69,10 @@ def projecteTopo(cip):
     c0 = net.get('c0')
     net.build()
 
-
     info('\n***Controlador\n') #esta ences en un altre terminal
     s1.start([ c0 ])
     info("\n***Flask_server1\n")
     server1.cmdPrint('sudo python Flask_server1.py &') #encenem server1
-    #info("***Ping test")
-    #net.pingAll()
     info("\n***Wait 5 seconds\n") #donem temps a encendre el server1
     time.sleep(5)
     info('\n***Scanning\n')
@@ -87,9 +87,8 @@ def projecteTopo(cip):
     info("\n***Wait 5 seconds\n")#donem temps a encendre server2
     time.sleep(5)
     info("\n***Scapy\n")
-    h1.cmdPrint('sudo python remix.py 10.0.10.2 get llista.txt')
-    h1.cmdPrint('sudo python atac.py 10.0.10.2 80 llista.txt 666') #script per fer wget a server2 port 80 des de la ip a llista.txt port 666, que es una ip permesa
-    h1.cmdPrint('cat atac.txt')
+    h1.cmdPrint('sudo python remix.py 10.0.10.2 get llista.txt') #script per fer wget a server2 port 80 des de la ip de la llista.txt, que es una ip permesa
+    h1.cmdPrint('cat index.html')
 
 
     info( '*** Running CLI\n' )
@@ -98,24 +97,7 @@ def projecteTopo(cip):
     info( '*** Stopping network\n' )
     net.stop()
 
-
-
 if __name__ == '__main__':
     setLogLevel( 'info' )
     IP_controlador = "127.0.0.1"
     projecteTopo(IP_controlador)
-
-
-
-    #h1.cmd('wget -o - http://0.0.0.0:2000')
-    #server2.cmd('sudo python Flask_server2.py')
-    #info(h1.cmd('cat index.html'))
-    #info('\n')
-
-
-
-    #info(h1.cmd('sudo scapy paquet.py'))
-    #info(ds)
-
-    #time.sleep(5)
-    #host.CLI('sudo scapy')
