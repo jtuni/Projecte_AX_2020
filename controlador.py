@@ -30,11 +30,7 @@ from ryu.lib.packet import ether_types
 from ryu.lib.packet import ipv4
 
 #todo:
-#en teoria ja esta, només ha d'afectar al switch i bloquejar tot el trafic
-#que no vingui de les IP de permitted[]
-
-except Exception as e:
-    raise
+#ja esta
 
 class SimpleSwitch(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_0.OFP_VERSION]
@@ -88,11 +84,8 @@ class SimpleSwitch(app_manager.RyuApp):
 
         actions = [datapath.ofproto_parser.OFPActionOutput(out_port)]
 
-	    permitted = ['179.45.148.12','140.46.16.51','146.125.56.143','199.209.11.3','51.190.116.2']
-
-
         if pkt_ipv4 != None:
-            if(pkt_ipv4.src not in permitted):
+            if(pkt_ipv4.src not in ['179.45.148.12','140.46.16.51','146.125.56.143','199.209.11.3','51.190.116.2','10.0.10.2','10.0.10.3','10.0.10.4']):
                 actions = []
 
         # install a flow to avoid packet_in next time

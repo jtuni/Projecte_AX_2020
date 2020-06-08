@@ -11,4 +11,4 @@ def hello():
     return render_template('Server2.html')
 
 if __name__ == '__main__':
-    app.run(debug=False, host="0.0.0.0", port=20906)
+    app.run(debug=False, host="10.0.10.2", port=80)
