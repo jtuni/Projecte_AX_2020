@@ -3,7 +3,6 @@ import os
 import random
 import time
 
-
 app = Flask(__name__)
 
 @app.route("/")
