@@ -55,9 +55,9 @@ def projecteTopo(cip):
     h1.cmd('ifconfig h1-eth0 10.0.0.2 netmask 255.255.255.0')
     server1.cmd('ifconfig server1-eth0 10.0.0.1 netmask 255.255.255.0')
     server2.cmd('ifconfig server2-eth0 10.0.10.2 netmask 255.255.255.0')
+
     s1.cmd('ifconfig s1-eth1 10.0.10.3 netmask 255.255.255.0')
     s1.cmd('ifconfig s1-eth2 10.0.10.4 netmask 255.255.255.0')
-    #s1.cmd('sudo python controlador.py')
 
     h1 = net.get('h1')
     server1 = net.get('server1')
@@ -86,8 +86,9 @@ def projecteTopo(cip):
     server2.cmdPrint("sudo python Flask_server2.py &")
     info("\n***Wait 5 seconds\n")#donem temps a encendre server2
     time.sleep(5)
-    info("\n***Scapy\n") #script per fer wget a server2 port 80 des de la ip a llista.txt port 666, que es una ip permesa
-    h1.cmdPrint('sudo python atac.py 10.0.10.2 80 llista.txt 666')
+    info("\n***Scapy\n")
+    h1.cmdPrint('sudo python remix.py 10.0.10.2 get llista.txt')
+    h1.cmdPrint('sudo python atac.py 10.0.10.2 80 llista.txt 666') #script per fer wget a server2 port 80 des de la ip a llista.txt port 666, que es una ip permesa
     h1.cmdPrint('cat atac.txt')
 
 
