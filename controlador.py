@@ -85,7 +85,7 @@ class SimpleSwitch(app_manager.RyuApp):
         actions = [datapath.ofproto_parser.OFPActionOutput(out_port)]
 
         if pkt_ipv4 != None:
-            if(pkt_ipv4.src not in ['179.45.148.12','140.46.16.51','146.125.56.143','199.209.11.3','51.190.116.2','10.0.10.2','10.0.10.3','10.0.10.4']):
+            if(pkt_ipv4.src not in ['179.45.148.12','140.46.16.51','146.125.56.143','199.209.11.3','51.190.116.2']):
                 actions = []
 
         # install a flow to avoid packet_in next time
